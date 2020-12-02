@@ -10,7 +10,7 @@ module.exports = {
         extract: true,
         // 开启 CSS source maps?
         sourceMap: true,
-        // css预设器配置项
+        // css预设器配置项a
         loaderOptions: {
             scss: {
                 prependData: `@import "./src/styles/main.scss";`
