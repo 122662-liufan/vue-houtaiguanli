@@ -21,7 +21,8 @@ module.exports = {
     configureWebpack: (config) => {
         config.resolve = {
             alias: {
-                // 获取绝对路径
+                // 获取绝对路径  
+                "@": path.resolve(__dirname, './src'),
                 "@c": path.resolve(__dirname, './src/components'),
                 "@a": path.resolve(__dirname, './src/assets'),
                 "@p": path.resolve(__dirname, './public'),
