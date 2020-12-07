@@ -4,6 +4,8 @@ const path = require("path");
 // 输出绝对路径 C:\Users\平凡的世界\Desktop\vue-houtaiguanli\src\components~
 // console.log('某个目录的绝对路径', path.resolve(__dirname, './src/components'));
 module.exports = {
+    // 基本路径
+    publicPath: process.env.NODE_ENV == 'production' ? '' : '/',
     lintOnSave: false,//是否开启语法检测
     css: {
         // 是否使用css分离插件 ExtractTextPlugin
@@ -32,5 +34,30 @@ module.exports = {
             // 引入文件的时候不写后缀，默认加载
             extensions: ['.js', '.json', '.vue']
         }
+    },
+
+    // 代理 devSever本地服务器的意思
+    devServer: {
+        port: 8080,
+        open: true, //启动项目打开浏览器
+        // 以 /api 都需要代理
+        proxy: {
+
+            // http://localhost:8010/api/getSms
+            // http://www.web-jshtml.cn/productapi/
+            // 需要替换成
+            // http://www.web-jshtml.cn/productapi/api/getSms
+            // Neteork 所展示的地址  /productapi/api/getSms 需要去掉 api
+            '/api': {
+                // 启动的目标服务器
+                target: 'http://www.web-jshtml.cn/productapi/',// http://localhost:8010/api/getSms  目标接口
+                // changeOrigin: true,  //是否跨域 自动生成一个localhost:8010 端口，域名下的node服务器，帮忙做代理
+                // // 重新 url
+                pathRewrite: {
+                    '^/api': ''
+                }
+            }
+        }
     }
 }
+
