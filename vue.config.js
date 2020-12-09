@@ -42,17 +42,19 @@ module.exports = {
         open: true, //启动项目打开浏览器
         // 以 /api 都需要代理
         proxy: {
-
             // http://localhost:8010/api/getSms
             // http://www.web-jshtml.cn/productapi/
             // 需要替换成
             // http://www.web-jshtml.cn/productapi/api/getSms
             // Neteork 所展示的地址  /productapi/api/getSms 需要去掉 api
+            // http://www.web-jshtml.cn/productapi/getSms 没有token业务的接口
+            // http://www.web-jshtml.cn/productapi/token/getSms  有token业务的接口
             '/api': {
                 // 启动的目标服务器
-                target: 'http://www.web-jshtml.cn/productapi/',// http://localhost:8010/api/getSms  目标接口
+                // target: 'http://www.web-jshtml.cn/productapi/',没有token业务的接口  http://localhost:8010/api/getSms  目标接口
                 // changeOrigin: true,  //是否跨域 自动生成一个localhost:8010 端口，域名下的node服务器，帮忙做代理
                 // // 重新 url
+                target: 'http://www.web-jshtml.cn/productapi/token/',
                 pathRewrite: {
                     '^/api': ''
                 }
