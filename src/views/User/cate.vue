@@ -1,6 +1,6 @@
 <template>
-  <div>
-    这是默认的首页
+  <div id="cate">
+    cate用户分类~~
   </div>
 </template>
 

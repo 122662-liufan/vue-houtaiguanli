@@ -3,12 +3,38 @@
 // sass 预编译器 
 //面试题: 程序的逻辑编css  sass-->sass loader-->css文件-->css-loader --js模块-->利用webpack-->style-loader-->style标签中的dom元素
 // 2.制定界面的风格 背景色 主题色
+
+// 引入全局的样式配置
+@import './config.scss';
+// 引入修改element-ui的样式
+@import './element.scss';
 // 重置浏览器的默认样式
 @import './reset.scss';
 
+// 常见的样式
+.pull-right{float:right;}
+.pull-left{float:left;}
+.space-24{margin-top:24px;}
 
-// 主题的css样式
-@import './theme.scss';
-body{
-    background-color:$bj-color;
+// 定义动画函数 浏览器兼容
+@mixin webkit($type,$value) {
+  -webkit-#{$type}:$value ; //谷歌
+  -moz-#{$type}:$value ;    //火狐  
+  -o-#{$type}:$value ;    //opera
+  -ms-#{$type}:$value ;   //iee
+}
+
+
+// 定义分类列表的css函数设置 label和表单元素
+@mixin labelDom($algin,$width,$line-height,$font-size:14,) {
+  label {
+    float: left;
+    width:$width + px;
+    text-align: $algin;
+    line-height: $line-height + px;
+    font-size: $font-size + px;
+  }
+  .warp-content {
+    margin-left:$width + px;
+  }
 }

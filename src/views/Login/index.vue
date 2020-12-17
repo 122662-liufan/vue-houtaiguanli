@@ -97,6 +97,11 @@ import { get_code, do_register, do_login } from '@/api/login.js'
 export default {
   setup(prop, { refs, root }) {
     //  -----------------------     生命周期     ---------------------------------------------
+    // onMounted(() => {
+    //   get_code().then((res) => {
+    //     console.log(res)
+    //   })
+    // })
     //  -----------------------     data      ---------------------------------------------
     const status_username = ref(false)
     const status_password = ref(false)
@@ -240,16 +245,14 @@ export default {
     // 获取验证码请求
     const getCode = () => {
       const { result, filed } = validateFileds()
-      //判断邮箱格式 密码 重复密码 的格式
       let offset = 0
-      // true 验证通过   false 验证失败
       if (!result) {
+        //true是验证通过， false是验证失败
         filed.map((item) => {
           offset += 40
-          //   console.log(item)
           root.$message({
             type: 'error',
-            message: `错误提示:${item.message}`,
+            message: `错误字段:${item.message}`,
             offset: offset,
             duration: 2000,
           })
@@ -257,6 +260,7 @@ export default {
 
         return false
       }
+
       //让获取验证码的按钮禁用，按钮内容改为 "发送中"
       setCodeButton({
         status: true,
@@ -267,22 +271,23 @@ export default {
       timer_delay.value = setTimeout(() => {
         const data = {
           username: ruleForm.username,
-          module: module.value,
+          module: mode.value,
         }
         get_code(data)
           .then((res) => {
-            //获取到对应的验证码
-            root.$message.success(res.data.message)
             //显示倒计时
             countDown(10)
+            //获取到对应的验证码
+            root.$message.success(res.data.message)
             //登录注册按钮启用
             buttonStatus.value = false
           })
           .catch((err) => {
             console.log(2)
           })
-      }, 3000)
+      }, 1000)
     }
+
     // -----------------------     辅助方法      ---------------------------------------------
     // 验证码倒计时定时器 ,周期性的
     const countDown = (timer) => {
@@ -329,16 +334,27 @@ export default {
         password: ruleForm.password,
         code: ruleForm.code,
       }
-      //   执行登录
-      do_login(data)
+      root.$store
+        .dispatch('app/login', data)
         .then((res) => {
-          // 提示登录成功
+          console.log('-->', res)
           root.$message.success(res.data.message)
-          //   toggleMenu(menuTab[0])
+          root.$router.push({ name: 'Home' })
         })
         .catch((err) => {})
+
+      //   执行登录  涉及网络请求，改写到 vue-actions-->mutations-->state
+      //   do_login(data)
+      //     .then((res) => {
+      //       // 提示登录成功
+      //       root.$message.success(res.data.message)
+      //       //  登录后跳转到首页
+      //       root.$router.push({ name: 'Home' })
+      //     })
+      //     .catch((err) => {})
     }
     // 执行注册
+
     const doRegister = () => {
       const data = {
         username: ruleForm.username,
@@ -355,34 +371,36 @@ export default {
         })
         .catch((err) => {})
     }
-    // 发送验证码时验证相关字段
+
+    //  发送验证码时验证相关字段
+
     const validateFileds = () => {
+      const result = status_username.value && status_password.value
       const _filed_arr = [
         {
           filed: 'username',
           flag: status_username.value,
-          message: '邮箱错误',
+          message: '邮箱格式错误',
         },
-        {
-          filed: 'password',
-          flag: status_password.value,
-          message: '密码错误',
-        },
-        {
+        { filed: 'password', flag: status_password.value, message: '密码错误' },
+      ]
+      if (mode.value === 'register') {
+        _filed_arr.push({
           filed: 'password1',
           flag: status_password1.value,
           message: '重复密码错误',
-        },
-      ].filter((item) => !item.flag)
-      //   console.log(_filed_arr)
-      return {
-        result:
-          status_username.value &&
+        })
+        result: status_username.value &&
           status_password.value &&
-          status_password1.value,
-        filed: _filed_arr,
+          status_password1.value
+      }
+
+      return {
+        result: result,
+        filed: _filed_arr.filter((item) => !item.flag),
       }
     }
+
     return {
       mode,
       menuTab,

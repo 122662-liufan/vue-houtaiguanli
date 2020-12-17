@@ -1,0 +1,80 @@
+
+
+// 选中的二级菜单样式
+.el-submenu .el-menu-item {
+    font-size: 10px;
+    padding-left: 60px !important;
+    &.is-active {
+        background-color:$Menu_2 !important;
+    }
+}
+
+// 选中的二级所对应的一级菜单的样式 el-submenu is-active is-opened
+li.el-submenu {
+    &.is-active.is-opened {
+        .el-submenu__title {
+            background-color: $Menu_1 !important;
+        }
+    }
+}
+
+// 修改收缩后选中的二级所对应的一级菜单的样式
+.close{
+  .el-submenu{
+    &.is-opened{
+      .el-submenu__title {
+        background-color: $Menu_2 !important;
+    }
+    }
+  }
+}
+// 修改收缩后选中的二级菜单样式
+.el-menu--vertical{
+  margin-left: -4.5px;
+  // 选中的二级菜单颜色
+  .el-menu-item:hover{
+    background-color: $Menu_1 !important;
+  }
+  // 文字高度居中
+  .el-menu-item{
+    line-height: 55px !important;
+  }
+  // 二级菜单背景颜色
+  .el-menu{
+    background-color: $Menu_2 !important;
+  }
+}
+// 移除侧边nav li的左边 border
+.el-menu{
+  border: none;
+}
+
+// 修改 table 表格的样式
+div.el-table{
+  th,td{
+    text-align: center;
+    color: #344a5f;
+  }
+  th{
+    font-weight: bold;
+  }
+  td{
+    font-size: 14px;
+  }
+}
+// 修改label所有字体颜色
+label,.el-input__inner{
+  color: #344a5f;
+}
+// <!-- 批量删除 -->
+// <div style="margin-top: 20px">
+//   <!-- 删除 @click="toggleSelection()"-->
+//   <el-button>批量删除</el-button>
+//   <!-- 分页 -->
+//   <el-pagination
+//     class="pull-right fy"
+//     background
+//     layout="prev, pager, next"
+//     :total="1000"
+//   ></el-pagination>
+// </div>

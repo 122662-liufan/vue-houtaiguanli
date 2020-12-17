@@ -3,44 +3,115 @@ import VueRouter from "vue-router";
 
 Vue.use(VueRouter);
 const routes = [
-    {
-        path: "/",
-        redirect: "/home"
+  {
+    path: "/",
+    redirect: "/home",
+    // 隐藏
+    hidden: true,
+    mate: {
+      name: ""
     },
-    {
-        path: "/home",
-        name: "Home",
-        component: () => import("../views/Home/index.vue")
+  },
+  {
+    path: "/home",
+    name: "Home",
+    // 显示
+    hidden: false,
+    // 自定义属性
+    mate: {
+      name: "控制台",
+      icon: 'console'
     },
-    {
-        path: "/login",
-        name: "Login",
-        component: () => import("../views/Login/index.vue")
-    }
+    component: () => import("../views/Layout/index.vue"),
+    // 默认的首页
+    redirect: "/index",
+    children: [
+      {
+        path: "/index",
+        name: "HomeIndex",
+        mate: {
+          name: "首页"
+        },
+        component: () => import("../views/Home/index.vue"),
+      }
+    ]
+  },
+  {
+    path: "/info",
+    name: "Info",
+    // 显示
+    hidden: false,
+    // 自定义属性
+    mate: {
+      name: "信息管理",
+      icon: 'info'
+    },
+    component: () => import("../views/Layout/index.vue"),
+    children: [
+      {
+        path: "/info",
+        name: "infoIndex",
+        mate: {
+          name: "信息列表"
+        },
+        component: () => import("../views/Info/index.vue"),
+      },
+      {
+        path: "/infoCate",
+        name: "infoCate",
+        mate: {
+          name: "信息分类"
+        },
+        component: () => import("../views/Info/cate.vue"),
+      }
+    ]
+  },
+  {
+    path: "/user",
+    name: "User",
+    // 显示
+    hidden: false,
+    // 自定义属性
+    mate: {
+      name: "用户管理",
+      icon: 'user'
+    },
+    component: () => import("../views/Layout/index.vue"),
+    children: [
+      {
+        path: "/userIndex",
+        name: "userIndex",
+        mate: {
+          name: "用户管理"
+        },
+        component: () => import("../views/User/index.vue"),
+      },
+      {
+        path: "/userCate",
+        name: "userCate",
+        mate: {
+          name: "用户分类"
+        },
+        component: () => import("../views/User/cate.vue"),
+      }
+    ]
+  },
+  {
+    path: "/login",
+    name: "Login",
+    // 隐藏
+    hidden: true,
+    mate: {
+      name: "登录"
+    },
+    component: () => import("../views/Login/index.vue")
+  }
 ];
 
 const router = new VueRouter({
-    mode: "history",
-    base: process.env.BASE_URL,
-    routes
+  mode: "history",
+  base: process.env.BASE_URL,
+  routes
 });
-// 路由守卫 登录才可以跳转页面
-router.beforeEach((to, from, next) => {
-    // console.log(to);//要去的位置，从哪里来的，名字
-    // console.log(from);//以前的位置，到哪里去，路径
-    // console.log(next);//方法
 
-    //声明看有没有登录
-    const isLogin = localStorage.getItem('ele_login') ? true : false;
-    if (to.path === '/login') {
-        // 往下一步走
-        next();
-    } else {
-        // localStorage.setItem('ele_login', true) //可以正常跳转
-        // 是否登录,没有登录就重定向到登录页面，如果登录了就正常往下一步走 next();
-        isLogin ? next() : next('/login');
-        // 后台写 ele_login true 可以跳转
-
-    }
-})
 export default router;

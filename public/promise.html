@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <h1>promise</h1>
+  <script>
+    // promise 的基本使用
+    // let promise = new Promise((resolve, reject) => {
+    //   // 业务流程   ---> ajax
+    //   reject(1111)
+    // })
+    // promise.then(res => {
+    //   console.log(res);
+    // }).catch(err => {
+    //   console.log(err);
+    // })
+
+    // 回调地狱 链式调用
+
+    const fun1 = (flag) => {
+      return new Promise((resolve, reject) => {
+        // 业务流程   ---> ajax
+        if (flag) {
+          console.log("第一个成功");
+          resolve('成功fun1')
+        } else {
+          console.log("第一个失败");
+          reject('失败1')
+        }
+
+      })
+    }
+
+    const fun2 = (flag) => {
+      return new Promise((resolve, reject) => {
+        // 业务流程   ---> ajax
+        if (flag) {
+          console.log("第二个成功");
+          resolve('成功fun2')
+        } else {
+          console.log("第二个失败");
+          reject('失败2')
+        }
+
+      })
+    }
+
+    const fun3 = (flag) => {
+      return new Promise((resolve, reject) => {
+        // 业务流程   ---> ajax
+        if (flag) {
+          console.log("第三个成功");
+          resolve('成功fun3')
+        } else {
+          console.log("第三个失败");
+          reject('失败3')
+        }
+
+      })
+    }
+
+    const fun4 = (flag) => {
+      return new Promise((resolve, reject) => {
+        // 业务流程   ---> ajax
+        if (flag) {
+          console.log("第四个成功");
+          resolve('成功fun4')
+        } else {
+          console.log("第四个失败");
+          reject('失败4')
+        }
+
+      })
+    }
+
+    // fun1(true).then(res => {
+    //   console.log(res);
+    //   return fun2(true)
+    // }).then(res => {
+    //   console.log(res);
+    //   return fun3(true)
+    // }).then(res => {
+    //   console.log(res);
+    //   return fun4(true)
+    // }).then(res => {
+    //   console.log(res);
+    // }).catch(err => {
+    //   console.log(err);
+    // })
+
+
+    //  alax 可以同时发多个
+    // all :多个promise同时执行 必须全部成功才能执行then 有一个失败就执行catch
+    // Promise.all([fun1(true), fun2(true), fun3(true), fun4(true)]).then(res => {
+    //   console.log('3333')
+    // }).catch(err => {
+    //   console.log('44444');
+    // })
+
+    // Promise.all([fun1(true), fun2(true), fun3(false), fun4(true)]).then(res => {
+    //   console.log('3333')
+    // }).catch(err => {
+    //   console.log('44444');
+    // })
+
+
+    //race(比赛) 那个先执行成功，就放弃其他的 有一个成功就执行then
+
+    Promise.race([fun1(true), fun2(false), fun3(true), fun4(false)]).then(res => {
+      console.log('3333') //执行成功
+    }).catch(err => {
+      console.log('44444');
+    })
+
+
+    // Promise.race([fun1(false), fun2(false), fun3(false), fun4(false)]).then(res => {
+    //   console.log('3333')
+    // }).catch(err => {
+    //   console.log('44444'); //执行失败
+    // })
+  </script>
+</body>
+
+</html>

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    这是默认的首页
+  <div id="index">
+    index用户管理~~
   </div>
 </template>
 
