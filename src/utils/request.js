@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
-import { getToken } from './cookie'
+import { getToken, getUsername } from './cookie'
 // const BASEURL = process.env.NODE_ENV === 'development' ? '/api' : '' //api
 let BASEURL = null
 // 使用本地的mock数据 true   如果走后台代理 false
@@ -26,16 +26,33 @@ const http = axios.create({
 // 跨域 指的是浏览器由于同源策略，不同域名，就会出现跨域，但是如果是两个后台发起网络请求就不存在跨域
 // http.defaults.baseURL = 'https://www.baidu.com/' //https://www.baidu.com/getSms
 // http.defaults.baseURL = 'http://www.web-jshtml.cn/c/'
+
+const tokenWhite = ['/getSms/', '/login/', '/register/']
+
+
 // 添加请求拦截器
 http.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么
   // 手动添加头参数 token userId csrf
-  if (getToken()) {
-    config.headers.token = getToken()
+
+  // 访问的是不需要 token 借口的
+  if (tokenWhite.indexOf(config.url) !== -1) {
+    // 提示服务器返回的信息
+    return config;
+  } else {
+    // 访问的是需要 token 借口的
+    if (getToken() && getUsername()) {
+      config.headers.Tokey = getToken()
+      config.headers.UserName = getUsername()
+      return config;
+    } else {
+      const message = "token或者用户名失效,请重新登录 !!!"
+      Message.error(message)
+      return Promise.reject({ error: message });
+    }
   }
 
-  // console.log('请求参数', config.headers)
-  return config;
+
 }, function (error) {
   // 对请求错误做些什么
   return Promise.reject(error);
@@ -49,7 +66,7 @@ http.interceptors.response.use(function (response) {
   if (response.data.resCode != 0) {
     // 提示服务器返回的信息
     Message.error(response.data.message) //提示邮箱不能为空！！
-    return Promise.reject(error);
+    return Promise.reject({ error: response.data.message });
   }
 
   return response;

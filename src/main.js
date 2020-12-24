@@ -11,6 +11,17 @@ import 'element-ui/lib/theme-chalk/index.css';
 import VueCompositionApi from '@vue/composition-api';
 // 导入全局图标组件
 import './icons/'
+
+
+// 注入全局方法/插件
+// import global from './utils/global' // 引入
+// Vue.use(global) // 添加
+
+
+// 导入 moment
+import moment from 'moment'
+Vue.prototype.$moment = moment
+
 Vue.use(ElementUI);
 Vue.use(VueCompositionApi);
 // 系统默认的环境变量
