@@ -17,18 +17,20 @@
         <el-submenu :index="index + ''" :key="index" v-if="!item.hidden">
           <template slot="title">
             <!-- 添加svg图标 -->
-            <svg-icon :iconName="item.mate.icon" :iconClass="item.mate.icon" />
+            <svg-icon :iconName="item.meta.icon" :iconClass="item.meta.icon" />
             <!-- 循环加载名字 -->
-            <span slot="title">{{ item.mate.name }}</span>
+            <span slot="title">{{ item.meta.name }}</span>
           </template>
           <!-- 二级路由 -->
           <el-menu-item-group>
-            <el-menu-item
-              :index="itemChild.path"
-              v-for="(itemChild, index) in item.children"
-              :key="index"
-              >{{ itemChild.mate.name }}</el-menu-item
-            >
+            <template v-for="(itemChild, index) in item.children">
+              <el-menu-item
+                :index="itemChild.path"
+                :key="index"
+                v-if="!itemChild.hidden"
+                >{{ itemChild.meta.name }}</el-menu-item
+              >
+            </template>
           </el-menu-item-group>
         </el-submenu>
       </template>

@@ -52,3 +52,12 @@ export const do_register = (data) => {
     data: data
   })
 }
+
+// 获取用户的权限
+export const get_roles = (data = {}) => {
+  return axios.request({
+    method: "post", //post请求
+    url: "/userRole/",
+    data: data
+  })
+}

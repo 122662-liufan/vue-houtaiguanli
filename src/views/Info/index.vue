@@ -113,7 +113,7 @@
         </el-table-column>
         <el-table-column prop="id" label="管理人" min-width="1">
         </el-table-column>
-        <el-table-column label="操作" min-width="2">
+        <el-table-column label="操作" min-width="3">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -126,6 +126,9 @@
               type="success"
               @click="editItem(scope.row.id)"
               >编辑</el-button
+            >
+            <el-button size="mini" type="success" @click="detailItem(scope.row)"
+              >编辑详情</el-button
             >
           </template>
         </el-table-column>
@@ -237,6 +240,42 @@ export default {
     let selected_data = reactive([])
     const editId = ref('')
     // --------------------------------- methods ------------------------------------
+    const detailItem = (row) => {
+      // 点击编辑信息，在nav中展示消息详情页面
+      root.$router.options.routes[2].children[2].hidden = false
+      // 跳转到消息详情页面
+      const params = {
+        id: {
+          value: row.id,
+          key: 'id',
+          // 保存到本地
+          session: true,
+        },
+        // content: {
+        //   value: 'xxx',
+        //   key: 'content',
+        //   // 保存到本地
+        //   session: true,
+        // },
+      }
+      root.$store.commit('params/CACHE_PARAMS', params)
+      root.$router.push({
+        // 第一种 query
+        // name: 'infoDetail',
+        // query: {
+        //   id: 1,
+        //   content: 'xxcxc',
+        // },
+        // 第二种  params
+        // 需要传递的参数保存到 vuex ---> 本地
+
+        name: 'infoDetail',
+        params: {
+          id: row.id,
+          // content: 'xxx',
+        },
+      })
+    }
     const editItem = (id) => {
       info_dialog_edit.value = true
       editId.value = id
@@ -317,9 +356,9 @@ export default {
       // console.log(ids)
       // console.log('删除')
       delete_news({ id: ids }).then((res) => {
-        ;(page.pageNumber = 1), //当前页码
-          (page.pageSize = 2), //当前所在页的数据数量
-          current_page
+        // ;(page.pageNumber = 1), //当前页码
+        //   (page.pageSize = 1), //当前所在页的数据数量
+        current_page
         getNews()
       })
     }
@@ -441,6 +480,7 @@ export default {
       getNews,
       size_change,
       editItem,
+      detailItem,
       // closeDialog,
     }
   },

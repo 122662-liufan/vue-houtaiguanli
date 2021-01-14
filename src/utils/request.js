@@ -10,7 +10,7 @@ if (mock) {
   BASEURL = process.env.NODE_ENV === 'development' ? '' : ''
 } else {
   // 走后台代理
-  BASEURL = process.env.NODE_ENV === 'development' ? '/api' : ''
+  BASEURL = process.env.NODE_ENV === 'development' ? '/api' : 'productapi'
 }
 
 const http = axios.create({

@@ -337,7 +337,7 @@ export default {
       root.$store
         .dispatch('app/login', data)
         .then((res) => {
-          console.log('-->', res)
+          // console.log('-->', res)
           root.$message.success(res.data.message)
           root.$router.push({ name: 'Home' })
         })

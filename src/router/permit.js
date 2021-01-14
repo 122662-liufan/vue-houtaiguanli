@@ -14,11 +14,39 @@ router.beforeEach((to, from, next) => {
       removeUsername()
       removeToken()
       // 清理vuex中的数据
-      store.commit('app/SET_UERNAME', '')
+      store.commit('app/SET_USERNAME', '')
       store.commit('app/SET_TOKEN', '')
+      //  存在，就是登陆了
+      next()
+    } else {
+      // 权限判断 --> 创建动态路由
+      // 1.时机 ： ok
+      // 2.条件： 当前用户有什么权限 --> 
+      if (store.getters['role/addRouter'].length == 0) {
+        store.dispatch('role/getRoles').then(res => {
+
+          // 获取权限
+          const roles = res
+          // 根据权限结合路由 创建动态路由
+          store.dispatch('role/createdRole', roles).then(res => {
+            // 获取经过过滤的该用户的路由对象
+            const addRouter = store.getters['role/addRouter']
+            const allRouter = store.getters['role/allRouter']
+            router.options.routes = allRouter
+            // console.log('-->>>>>>', allRouter);
+            // 添加到全局的路由对象
+            router.addRoutes(addRouter)
+            //  存在，就是登陆了
+            next({ ...to })
+          })
+        })
+      } else {
+        //  存在，就是登陆了
+        next()
+      }
+
     }
-    //  存在，就是登陆了
-    next()
+
   } else {
     if (writeRouter.indexOf(to.path) !== -1) {
       next()
@@ -27,5 +55,5 @@ router.beforeEach((to, from, next) => {
       next('/login')
     }
   }
-
 })
+// LiuFan122662@qq.com

@@ -1,16 +1,28 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
+
 Vue.use(VueRouter);
-const routes = [
+export const defaultRoutes = [
+  // 都能访问的公共路由
   {
     path: "/",
     redirect: "/home",
     // 隐藏
     hidden: true,
-    mate: {
+    meta: {
       name: ""
     },
+  },
+  {
+    path: "/login",
+    name: "Login",
+    // 隐藏
+    hidden: true,
+    meta: {
+      name: "登录"
+    },
+    component: () => import("../views/Login/index.vue")
   },
   {
     path: "/home",
@@ -18,7 +30,7 @@ const routes = [
     // 显示
     hidden: false,
     // 自定义属性
-    mate: {
+    meta: {
       name: "控制台",
       icon: 'console'
     },
@@ -29,41 +41,70 @@ const routes = [
       {
         path: "/index",
         name: "HomeIndex",
-        mate: {
-          name: "首页"
+        meta: {
+          name: "首页",
+          // 代表要缓存，不需要缓存的话设置 false
+          keep: true
+
         },
         component: () => import("../views/Home/index.vue"),
       }
     ]
   },
+];
+
+export const roleRouter = [
+  // 权限选择的路由
+
   {
     path: "/info",
     name: "Info",
     // 显示
     hidden: false,
     // 自定义属性
-    mate: {
+    meta: {
       name: "信息管理",
-      icon: 'info'
+      icon: 'info',
+      role: ['salesman']
     },
     component: () => import("../views/Layout/index.vue"),
     children: [
       {
         path: "/info",
         name: "infoIndex",
-        mate: {
-          name: "信息列表"
+        meta: {
+          name: "信息列表",
+          // 代表要缓存
+          keep: true,
+          role: ['info.index']
         },
         component: () => import("../views/Info/index.vue"),
       },
       {
         path: "/infoCate",
         name: "infoCate",
-        mate: {
-          name: "信息分类"
+        meta: {
+          name: "信息分类",
+          // 代表要缓存
+          keep: true,
+          role: ['info.cate']
         },
         component: () => import("../views/Info/cate.vue"),
+      },
+      {
+        path: "/infoDetail",
+        name: "infoDetail",
+        // 隐藏
+        hidden: true,
+        meta: {
+          name: "消息详情",
+          // 代表要缓存
+          keep: true,
+          role: ['info.detail']
+        },
+        component: () => import("../views/Info/detail.vue"),
       }
+
     ]
   },
   {
@@ -72,46 +113,43 @@ const routes = [
     // 显示
     hidden: false,
     // 自定义属性
-    mate: {
+    meta: {
       name: "用户管理",
-      icon: 'user'
+      icon: 'user',
+      role: ['salesman']
     },
     component: () => import("../views/Layout/index.vue"),
     children: [
       {
         path: "/userIndex",
         name: "userIndex",
-        mate: {
-          name: "用户管理"
+        meta: {
+          name: "用户管理",
+          // 代表不要缓存
+          keep: false,
+          role: ['user.index']
         },
         component: () => import("../views/User/index.vue"),
       },
       {
         path: "/userCate",
         name: "userCate",
-        mate: {
-          name: "用户分类"
+        meta: {
+          name: "用户分类",
+          // 代表要缓存 
+          keep: true,
+          role: ['user.cate']
         },
         component: () => import("../views/User/cate.vue"),
       }
     ]
-  },
-  {
-    path: "/login",
-    name: "Login",
-    // 隐藏
-    hidden: true,
-    mate: {
-      name: "登录"
-    },
-    component: () => import("../views/Login/index.vue")
   }
-];
+]
 
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
-  routes
+  routes: defaultRoutes
 });
 
 export default router;

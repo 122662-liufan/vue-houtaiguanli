@@ -1,7 +1,7 @@
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
-import store from "./store";
+import store from "./store/index";
 // 导入路由权限限制
 import './router/permit.js'
 // 全局引用 element-ui
@@ -14,8 +14,16 @@ import './icons/'
 
 
 // 注入全局方法/插件
-// import global from './utils/global' // 引入
-// Vue.use(global) // 添加
+import global from './utils/global' // 引入
+Vue.use(global) // 添加
+
+
+// 富文本引入
+// import VueQuillEditor from 'vue-quill-editor'
+// import 'quill/dist/quill.core.css'
+// import 'quill/dist/quill.snow.css'
+// import 'quill/dist/quill.bubble.css'
+// Vue.use(VueQuillEditor);
 
 
 // 导入 moment
